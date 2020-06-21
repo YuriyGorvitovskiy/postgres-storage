@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = {
     mode: "development",
     target: "node",
@@ -6,12 +8,13 @@ module.exports = {
         filename: "prostgres-storage.js",
         path: __dirname + "/build"
     },
-
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: [".ts", ".tsx", ".js", ".json"]
     },
-
+    plugins: [
+        new webpack.IgnorePlugin(/^pg-native$/)
+    ],
     module: {
         rules: [
             // All files with a '.ts' extension will be handled by 'ts-loader'.
