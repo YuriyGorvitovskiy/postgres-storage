@@ -1,0 +1,55 @@
+{
+    "name": "postgres-storage",
+    "version": "1.0.0",
+    "description": "",
+    "author": "Yuriy Gorvitovskiy",
+    "main": "build/prostgres-storage.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/YuriyGorvitovskiy/postgres-storage.git"
+    },
+    "bugs": {
+        "url": "https://github.com/YuriyGorvitovskiy/postgres-storage/issues"
+    },
+    "homepage": "https://github.com/YuriyGorvitovskiy/postgres-storage#readme",
+    "license": "ISC",
+    "scripts": {
+        "upgrade-dep": "npx npm-check-updates -u && npm install",
+        "compile": "tsc",
+        "format": "prettier --write \"src/**/*.ts\" .prettierrc jest.config.js package.json tsconfig.json tslint.json",
+        "lint": "tslint -p tsconfig.json",
+        "test": "jest --coverage",
+        "docs": "typedoc --theme minimal --out ./build/docs --exclude **/*.test.ts --readme README.md ./src",
+        "webpack": "webpack",
+        "start": "node ./build/prostgres-storage.js",
+        "build": "npm run format && npm run compile",
+        "check": "npm run format && npm run compile && npm run lint && npm run test",
+        "package": "npm run format && npm run lint && npm run test && npm run webpack",
+        "restart": "npm run package && npm run start"
+    },
+    "dependencies": {
+        "body-parser": "1.19.0",
+        "express": "4.17.1",
+        "immutable": "4.0.0-rc.12",
+        "pg": "8.2.1",
+        "sqlstring": "2.3.2"
+    },
+    "devDependencies": {
+        "@types/express": "4.17.6",
+        "@types/jest": "26.0.0",
+        "@types/node": "14.0.13",
+        "@types/pg": "7.14.3",
+        "jest": "26.0.1",
+        "npm-check-updates": "7.0.1",
+        "prettier": "2.0.5",
+        "ts-jest": "26.1.0",
+        "ts-loader": "7.0.5",
+        "ts-node": "8.10.2",
+        "tslint": "6.1.2",
+        "tslint-config-prettier": "1.18.0",
+        "typedoc": "0.17.7",
+        "typescript": "3.9.5",
+        "webpack": "4.43.0",
+        "webpack-cli": "3.3.12"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "declaration": true,
+        "lib": ["ES2020"],
+        "module": "commonjs",
+        "outDir": "./build/js",
+        "resolveJsonModule": true,
+        "strict": false,
+        "target": "es6"
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "**/*.test.ts"]
+}
