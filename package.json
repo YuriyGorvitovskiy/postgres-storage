@@ -21,7 +21,7 @@
         "test": "jest --coverage",
         "docs": "typedoc --theme minimal --out ./build/docs --exclude **/*.test.ts --readme README.md ./src",
         "webpack": "webpack",
-        "start": "node ./build/prostgres-storage.js",
+        "start": "node --inspect ./build/prostgres-storage.js",
         "build": "npm run format && npm run compile",
         "check": "npm run format && npm run compile && npm run lint && npm run test",
         "package": "npm run format && npm run lint && npm run test && npm run webpack",

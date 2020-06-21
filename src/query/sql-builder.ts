@@ -213,7 +213,7 @@ const readPluralRecord = (
     const rowId = row[idColumn];
     const queryRecords = acc.get(accField) as IM.OrderedMap<string, IM.Map<string, any>>;
     if (null == rowId) {
-        return queryRecords || acc.set(accField, EMPTY_OMAP);
+        return queryRecords ? acc : acc.set(accField, EMPTY_OMAP);
     }
     const key = "" + rowId;
     const beginRecord = queryRecords?.get(key);

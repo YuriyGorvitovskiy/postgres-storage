@@ -4,6 +4,7 @@ module.exports = {
     mode: "development",
     target: "node",
     entry: "./src/index.ts",
+    devtool: 'source-map',
     output: {
         filename: "prostgres-storage.js",
         path: __dirname + "/build"
