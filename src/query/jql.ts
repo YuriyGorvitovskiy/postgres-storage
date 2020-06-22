@@ -116,7 +116,7 @@ const fillChildDefaults = <
         : (fillFieldDefaults(k, v as Field, parentSelect) as O);
 };
 const fillSubQueryDefaults = <R, S>(key: keyof R, query: SubQuery<S>, parentSelect: boolean): StrictSubQuery<S> => {
-    const select = parentSelect ? query.$select || true : false;
+    const select = parentSelect && false !== query.$select;
     return {
         $type: query.$type,
         $rev: query.$rev || false,
@@ -127,7 +127,7 @@ const fillSubQueryDefaults = <R, S>(key: keyof R, query: SubQuery<S>, parentSele
     };
 };
 const fillFieldDefaults = <R>(key: keyof R, field: Field, parentSelect: boolean): StrictField => {
-    const select = parentSelect ? field.$select || true : false;
+    const select = parentSelect && false !== field.$select;
     return {
         $field: field.$field || (key as string),
         $cmp: field.$cmp || (!("$value" in field) ? "any" : Array.isArray(field.$value) ? "in" : "="),
