@@ -1,7 +1,5 @@
 import * as JQL from "./jql";
-import * as SQL from "./sql";
-import * as PG from "./postgres";
-
+import * as PG from "../database/postgres";
 import * as SB from "./sql-builder";
 
 test("Simple forward query", () => {
@@ -33,14 +31,14 @@ test("Simple forward query", () => {
     const [select, reader] = SB.toSQL(query);
 
     // Verify
-    expect(PG.toSql(select)).toBe(`\
+    expect(PG.toSql("gen", select)).toBe(`\
 SELECT t1.id AS c1,
        t1.label AS c2,
        t1.hrcdpayq AS c3,
        t2.id AS c4,
        t2.label AS c5
-  FROM hltrfv t1
-  LEFT JOIN casbwpilgejqgunxera t2 ON t2.id = t1.rgmqgeete
+  FROM gen.hltrfv t1
+  LEFT JOIN gen.casbwpilgejqgunxera t2 ON t2.id = t1.rgmqgeete
  WHERE t1.hrcdpayq < 0`);
     const response = [
         {
@@ -130,16 +128,16 @@ test("Simple reverse query", () => {
     const [select, reader] = SB.toSQL(query);
 
     // Verify
-    expect(PG.toSql(select)).toBe(`\
+    expect(PG.toSql("gen", select)).toBe(`\
 SELECT t1.id AS c1,
        t1.label AS c2,
        t2.id AS c3,
        t2.label AS c4,
        t3.id AS c5,
        t3.label AS c6
-  FROM hltrfv t1
-  LEFT JOIN eoxfauxk t2 ON t2.scvkxq = t1.id
-  LEFT JOIN ircglgzd t3 ON t3.xtbfolusqqklrxxmr = t1.id`);
+  FROM gen.hltrfv t1
+  LEFT JOIN gen.eoxfauxk t2 ON t2.scvkxq = t1.id
+  LEFT JOIN gen.ircglgzd t3 ON t3.xtbfolusqqklrxxmr = t1.id`);
 
     const response = [
         {
