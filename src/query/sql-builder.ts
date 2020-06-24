@@ -206,7 +206,7 @@ const readSingleRecord = (
         return acc.set(accField, null);
     }
     const beginRecord = acc.get(accField) as IM.Map<string, any>;
-    const argRecord = beginRecord || IM.Map();
+    const argRecord = beginRecord || EMPTY_MAP;
     const endRecord = childReader(argRecord, row);
     return beginRecord === endRecord ? acc : acc.set(accField, endRecord);
 };
@@ -236,7 +236,20 @@ const listifyOrderedMaps = (omap: IM.OrderedMap<string, IM.Map<string, any>>): I
         .map((e) =>
             e.mapEntries(([k, v]) => [
                 k,
-                IM.OrderedMap.isOrderedMap(v) ? listifyOrderedMaps(v as IM.OrderedMap<string, IM.Map<string, any>>) : v,
+                IM.OrderedMap.isOrderedMap(v)
+                    ? listifyOrderedMaps(v as IM.OrderedMap<string, IM.Map<string, any>>)
+                    : IM.Map.isMap(v)
+                    ? listifyMapEntries(v as IM.Map<string, any>)
+                    : v,
             ])
         );
+};
+const listifyMapEntries = (map: IM.Map<string, any>): IM.Map<string, any> => {
+    return map.map((v) =>
+        IM.OrderedMap.isOrderedMap(v)
+            ? listifyOrderedMaps(v as IM.OrderedMap<string, IM.Map<string, any>>)
+            : IM.Map.isMap(v)
+            ? listifyMapEntries(v as IM.Map<string, any>)
+            : v
+    );
 };
