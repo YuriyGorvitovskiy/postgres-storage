@@ -46,8 +46,13 @@ app.get("/jql/:schema", async (req, res) => {
     try {
         const [select, reader] = BLD.toSQL(req.body);
         const sql = PG.toSql(req.params.schema, select);
-        const rs = await PG.execute(sql);
+        if (req.query.sql) {
+            res.type("text");
+            res.send(sql);
+            return;
+        }
 
+        const rs = await PG.execute(sql);
         res.type("json");
         res.send(JSON.stringify(reader(rs.rows)));
     } catch (ex) {

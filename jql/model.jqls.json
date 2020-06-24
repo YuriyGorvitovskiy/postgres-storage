@@ -34,6 +34,36 @@
             }
         }
     },
+    "Get all classes with reference attributes, Use shortcuts",
+    {
+        "$type": "class",
+        "schema:schema": {
+            "$select": false,
+            "label": "gen"
+        },
+        "label": {},
+        "^class:attribute": {
+            "label": {
+                "$cmp": "!=",
+                "$value": "id"
+            },
+            "type": "reference",
+            "target:class": {
+                "label": {}
+            }
+        },
+        "incoming": {
+            "$type": "attribute",
+            "$rev": true,
+            "$field": "target",
+            "label": {},
+            "type": "reference",
+            "class": {
+                "$type": "class",
+                "label": {}
+            }
+        }
+    },
     "Get 3 level deep hierarchies from class pygydseeuqzuys",
     {
         "$type": "class",
@@ -65,6 +95,32 @@
                             "target": {
                                 "$type": "class",
                                 "$cmp": "exists",
+                                "label": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "Get 3 level deep hierarchies from class pygydseeuqzuys. Use shortcuts",
+    {
+        "$type": "class",
+        "label": "jexkg",
+        "^class:attribute": {
+            "label": {},
+            "type": "reference",
+            "target:class": {
+                "label": {},
+                "^class:attribute": {
+                    "label": {},
+                    "type": "reference",
+                    "target:class": {
+                        "label": {},
+                        "^class:attribute": {
+                            "label": {},
+                            "type": "reference",
+                            "target!:class": {
                                 "label": {}
                             }
                         }

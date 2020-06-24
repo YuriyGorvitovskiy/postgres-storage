@@ -111,17 +111,21 @@ const fillChildDefaults = <
 ): O => {
     return isValue(v)
         ? (fillFieldDefaults(k, { $value: v as value }, parentSelect) as O)
-        : "$type" in v
+        : "$type" in v || k.toString().includes(":")
         ? (fillSubQueryDefaults(k, v as SubQuery<R>, parentSelect) as O)
         : (fillFieldDefaults(k, v as Field, parentSelect) as O);
 };
 const fillSubQueryDefaults = <R, S>(key: keyof R, query: SubQuery<S>, parentSelect: boolean): StrictSubQuery<S> => {
     const select = parentSelect && false !== query.$select;
+    const [part1, type] = key.toString().split(":");
+    const rev = part1.startsWith("^");
+    const cmp = part1.endsWith("!") ? "exist" : "any";
+    const name = part1.replace(/^\^/, "").replace(/\!$/, "");
     return {
-        $type: query.$type,
-        $rev: query.$rev || false,
-        $field: query.$field || key,
-        $cmp: query.$cmp || "any",
+        $type: query.$type || type,
+        $rev: query.$rev || rev,
+        $field: query.$field || name,
+        $cmp: query.$cmp || cmp,
         $select: select,
         ...fillChildrenDefaults(query, select),
     };
