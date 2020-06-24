@@ -52,14 +52,10 @@
                 "label": {}
             }
         },
-        "incoming": {
-            "$type": "attribute",
-            "$rev": true,
-            "$field": "target",
+        "^target:attribute": {
             "label": {},
             "type": "reference",
-            "class": {
-                "$type": "class",
+            "class:class": {
                 "label": {}
             }
         }

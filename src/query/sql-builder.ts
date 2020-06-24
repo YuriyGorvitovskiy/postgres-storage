@@ -6,6 +6,7 @@ type ResultReader = (rows: any[]) => IM.List<IM.Map<string, any>>;
 type RowReader = (acc: IM.Map<string, any>, row: any) => IM.Map<string, any>;
 
 const EMPTY_LIST = IM.List();
+const EMPTY_MAP = IM.Map<string, any>();
 const EMPTY_OMAP = IM.OrderedMap();
 const EMPTY_READER: RowReader = (a) => a;
 
@@ -18,6 +19,7 @@ interface Selector {
 
 interface Context {
     readonly tableAlias: string;
+    readonly idColAlias: string;
     readonly nextTableAlias: () => string;
     readonly nextColumnAlias: () => string;
 }
@@ -27,7 +29,7 @@ export const toSQL = <R>(implicitQuery: JQL.Query<R>): [SQL.Select, ResultReader
     const ctx = initialContext();
     const join = SQL.from(query.$type, ctx.tableAlias);
     const id = SQL.column(ctx.tableAlias, "id");
-    const as = ctx.nextColumnAlias();
+    const as = ctx.idColAlias;
 
     const childrenSelector = addChildren(ctx, query);
 
@@ -48,6 +50,7 @@ const initialContext = (): Context => {
     const nextColumnAlias = () => "c" + ++columnCounter;
     return {
         tableAlias: nextTableAlias(),
+        idColAlias: nextColumnAlias(),
         nextTableAlias,
         nextColumnAlias,
     };
@@ -56,6 +59,7 @@ const initialContext = (): Context => {
 const nextContext = (ctx: Context): Context => {
     return {
         tableAlias: ctx.nextTableAlias(),
+        idColAlias: ctx.nextColumnAlias(),
         nextTableAlias: ctx.nextTableAlias,
         nextColumnAlias: ctx.nextColumnAlias,
     };
@@ -99,8 +103,8 @@ const addSubQuery = <R>(prevCtx: Context, name: string, query: JQL.StrictSubQuer
     let fields = EMPTY_LIST;
     let alias = null;
     if (query.$select) {
-        alias = prevCtx.nextColumnAlias();
-        fields = IM.List.of(SQL.field(id, alias));
+        alias = nextCtx.idColAlias;
+        fields = IM.List.of(SQL.field(id, nextCtx.idColAlias));
     }
 
     const childrenSelector = addChildren(nextCtx, query);
@@ -124,10 +128,14 @@ const addField = (ctx: Context, name: string, fld: JQL.StrictField): Selector =>
 
     let fields = EMPTY_LIST;
     let reader = EMPTY_READER;
-    if (fld.$select && "id" !== fld.$field) {
-        const alias = ctx.nextColumnAlias();
-        fields = IM.List.of(SQL.field(col, alias));
-        reader = (acc, row) => acc.set(name, row[alias]);
+    if (fld.$select) {
+        if ("id" === fld.$field) {
+            reader = (acc, row) => acc.set(name, row[ctx.idColAlias]);
+        } else {
+            const alias = ctx.nextColumnAlias();
+            fields = IM.List.of(SQL.field(col, alias));
+            reader = (acc, row) => acc.set(name, row[alias]);
+        }
     }
 
     return {
@@ -177,7 +185,7 @@ const readResultSet = (
         const rowId = row[idColumn];
         const key = "" + rowId;
         const beginRecord = acc.get(key);
-        const argRecord = beginRecord || IM.Map({ id: rowId });
+        const argRecord = beginRecord || EMPTY_MAP;
         const endRecord = rowReader(argRecord, row);
         if (beginRecord === endRecord) {
             return acc;
@@ -198,7 +206,7 @@ const readSingleRecord = (
         return acc.set(accField, null);
     }
     const beginRecord = acc.get(accField) as IM.Map<string, any>;
-    const argRecord = beginRecord || IM.Map({ id: rowId });
+    const argRecord = beginRecord || IM.Map();
     const endRecord = childReader(argRecord, row);
     return beginRecord === endRecord ? acc : acc.set(accField, endRecord);
 };
@@ -217,7 +225,7 @@ const readPluralRecord = (
     }
     const key = "" + rowId;
     const beginRecord = queryRecords?.get(key);
-    const argRecord = beginRecord || IM.Map({ id: rowId });
+    const argRecord = beginRecord || EMPTY_MAP;
     const endRecord = childReader(argRecord, row);
     return beginRecord === endRecord ? acc : acc.set(accField, (queryRecords || EMPTY_OMAP).set(key, endRecord));
 };

@@ -69,7 +69,6 @@ SELECT t1.id AS c1,
             label: "first",
             hrcdpayq: 12.3,
             rgmqgeete: {
-                id: 234,
                 label: "first-first",
             },
         },
@@ -78,7 +77,6 @@ SELECT t1.id AS c1,
             label: "second",
             hrcdpayq: 23.4,
             rgmqgeete: {
-                id: 235,
                 label: "second-first",
             },
         },
@@ -236,11 +234,9 @@ SELECT t1.id AS c1,
             label: "Vatjjocbuyji",
             eoxfauxk: [
                 {
-                    id: 15314,
                     label: "Teh",
                 },
                 {
-                    id: 15884,
                     label: "Kae",
                 },
             ],
@@ -268,7 +264,6 @@ SELECT t1.id AS c1,
             label: "Ruwwxf",
             eoxfauxk: [
                 {
-                    id: 15764,
                     label: "Yywnrvmnuhxtdoom",
                 },
             ],
