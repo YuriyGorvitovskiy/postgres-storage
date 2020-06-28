@@ -5,6 +5,7 @@ import * as PG from "../database/postgres";
 
 export const app = express();
 app.use(bodyParser.json());
+app.use(express.static("../model-browser/build/web"));
 
 app.get("/record/:schema/:table/:id", async (req, res) => {
     try {
