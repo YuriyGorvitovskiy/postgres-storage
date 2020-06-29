@@ -43,7 +43,7 @@ OFFSET $2`;
     }
 });
 
-app.get("/jql/:schema", async (req, res) => {
+app.post("/jql/:schema", async (req, res) => {
     try {
         const [select, reader] = BLD.toSQL(req.body);
         const sql = PG.toSql(req.params.schema, select);
