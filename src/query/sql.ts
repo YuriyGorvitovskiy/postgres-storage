@@ -21,7 +21,7 @@ export interface Predicate {
 
 export type Expression = Column | Predicate | Literal;
 
-export type JoinKind = "from" | "inner" | "left";
+export type JoinKind = "from" | "inner" | "left" | "full";
 
 export interface Join {
     readonly kind: JoinKind;
@@ -119,3 +119,4 @@ export const notIn = (a: Expression, ...l: Expression[]): Predicate => ({
 export const from = (tbl: string, as: string): Join => ({ kind: "from", tbl, as, on: null });
 export const inner = (tbl: string, as: string, on: Predicate): Join => ({ kind: "inner", tbl, as, on });
 export const left = (tbl: string, as: string, on: Predicate): Join => ({ kind: "left", tbl, as, on });
+export const full = (tbl: string, as: string, on: Predicate): Join => ({ kind: "full", tbl, as, on });

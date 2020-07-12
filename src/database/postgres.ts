@@ -143,6 +143,8 @@ const joinKindToSql = (kind: SQL.JoinKind): string => {
             return " INNER JOIN";
         case "left":
             return "  LEFT JOIN";
+        case "full":
+            return "  FULL JOIN";
         default:
             break;
     }
